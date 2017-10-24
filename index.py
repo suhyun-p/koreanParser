@@ -3,13 +3,23 @@ kkma = Kkma()
 
 class attrDic:
     keywordList = []
-    def __init__(self):
-        print(1)
+    attrList = []
 
-keywordList = []
-keywordList.append('냄새/NNG')
-keywordList.append('가격/NNG')
-keywordList.append('배송/NNG')
+    def __init__(self):
+        self.keywordList.append('냄새/NNG')
+        self.attrList.append(['나/NP'])
+        self.keywordList.append('가격/NNG')
+        self.attrList.append(['착하/VA'])
+        self.keywordList.append('배송/NNG')
+        self.attrList.append(['빠르/VA'])
+
+    def getAttrList(self, keyword):
+        if keyword in self.keywordList:
+            i = self.keywordList.index(keyword)
+            if i > -1:
+                return self.attrList[i]
+
+
 
 class chnkDetail:
     chnkList = [] # ['가격/NNG', '대비/NNG', '최고/NNG', '에/JKM', '요/JX']
@@ -389,7 +399,7 @@ class textAnalyzer:
                 ,['NNB']
             ]
             , [
-                ['VA', 'VV']
+                ['VA', 'VV', 'VCN']
                 ,[]
             ]
         ]
@@ -397,10 +407,11 @@ class textAnalyzer:
         # ['권하/VV', '고/ECE']['싶/VXA', '은/ETD']
         # ['챙기/VV', '어/ECS']['주/VXV', '고/ECE']
         # ['하/VV', '어/ECS']['주/VXV', '시/EPH', '고/ECE']
+        # ['나쁘/VA', '지/ECD']['않/VXV', '고/ECE']
         rule2 = [
             [
                 []
-                , ['ECE', 'ECS']
+                , ['ECE', 'ECS', 'ECD']
             ]
             , [
                 ['VXA', 'VXV']
@@ -532,18 +543,31 @@ class textAnalyzer:
         for i in range(len(chnkListDep2)):
             detail = chnkListDep2[i]
             nextDetail = 'None'
+            beforeDetail = 'None'
             if i < len(chnkListDep2)-1:
                 nextDetail = chnkListDep2[i+1]
+            if i > 0:
+                beforeDetail = chnkListDep2[i-1]
 
             # ['착하/VA', 'ㄴ/ETD'] > ['가격/NNG', '에다/JC']
             if detail.eTag == 'ETD':
                 if nextDetail != 'None' and nextDetail.sTag == 'NNG':
                     print('\t', detail.text, '>', nextDetail.text)
 
+            # ['배송/NNG']['많이/MAG']['느리/VA', 'ㅂ니다/EFN']
+            if detail.sTag == 'MAG':
+                if nextDetail != 'none' and (nextDetail.sTag == 'VA' or nextDetail.sTag == 'VV' or nextDetail.sTag == 'NNG' or nextDetail.sTag == 'XR' or nextDetail.sTag == 'NP'):
+                    print('\t', detail.text, '>', nextDetail.text)
+                    if beforeDetail != 'None' and beforeDetail.eTag == 'NNG':
+                        print('\t', beforeDetail.text, '<', nextDetail.text)
+
             # ['화질/NNG', '도/JX'] < ['좋/VA', '고/ECE']
             if detail.sTag == 'NNG':
                 if nextDetail != 'None' and (nextDetail.sTag == 'VA' or nextDetail.sTag == 'VV'):
                     print('\t', detail.text, '<', nextDetail.text)
+
+
+
 
         '''
         if detail.sTag == 'NNG':
@@ -596,7 +620,10 @@ textList.append('들깨가루를 구입을 하였는데 가격도 좋고 빠른 
 textList.append('주위분들이 비타민이 좋다하여 부모님과 제가 먹으려고 2개 구입했습니다. 추석명절전이라 추석전에 도착할까 걱정 많이했는데 다행히 도착하여 부모님께 잘 선물해 드렸습니다. 빠른 배송 감사드리며, 몇번을 포장하여 안전하게 도착했습니다. 비타민 잘 먹고 부모님과 제가 올 겨울에는 감기 걱정없이 보냈으면 합니다.')
 textList.append('딸기맛 사탕 구입하다가 이걸로 바꿨는데. 가격도 나쁘지 않고. 크기는 콩알만 하지만 과일맛이 여러가지라서 좋네요. 어차피 향이랑 색소 차이라서 녹으면 설탕 맛입니다. 배송 많이 느립니다. 한시간 넘게 느려요.')
 textList.append('배송빠르고 가격싸고 사은품챙겨주고 무엇보다 믿을수있는 브랜드에 업체가 확실하여 주져없이 주문했어요  최~~~고!!!!')
+textList.append('사이즈 넉넉하지 않고')
+textList.append('사이즈 넉넉하지 아니하고')
 textList.append('사이즈 넉넉하고 프린트도 예뻐서 마음에 들어요 동생도 보더니 예쁘다고 자기꺼도 사달래네요 배송도 빠르고 만족합니다 많이 파세요!')
+textList.append('아직 안 써봐서 뭐 할 수는 없지만  일단 배송 빨랐어요 이번엔 꼭 임신 됐으면 좋겠네요^^ 다른분들도 이쁜아기 낳고 행복하세요^^')
 textList.append('아직 안 써봐서 뭐리 할 수는 없지만  일단 배송 빨랐어요 이번엔 꼭 임신 됐으면 좋겠네요^^ 다른분들도 이쁜아기 낳고 행복하세요^^')
 textList.append('배송 정말 하루만에 오네요 천천히 와도 되는데.. 맛은 초코가 좀더 맛있는겨 같아요 그래도 잘 먹을게요')
 textList.append('초기불량으로 교환요청했는데 보낼생각을 안하다가 글 남기니까 배송하네요 ㅋㅋㅋ')
@@ -610,6 +637,11 @@ textList.append('브릿츠 스피커 작은거 쓰다가 이번에 새로나온 
 textList.append('배송빨라서 좋았습니다. 기존와이파이가 고장나서 구매하게 되었는데 속도, 인식률등등 다방면적으로마음에 드네요~~ 문의가있어 전화드렸더니 친절하게 응대해주셔서 기분좋았습니다~^^')
 textList.append('좋은 선물이 되었어요  명절연휴 끝나고 또 추가주문했는데 금액이 좀 오른거죠? 그래도 먹기에도 선물로도 고급지고 맘에 들어요 좋아요 좋아요 롯데**에서 7만원대에 팔더군요 70미리 60개~')
 textList.append('아버지 생신 선물로 사드렸는데 이쁘네요.')
+textList.append('가격도 매우 저렴하고 일단 맛이 입맛에 당길 정도로 칼칼하고 부드러워요 맛있어요 배송도 빠르고 친절합니다')
+textList.append('가격도매우저렴히고일단맛이입맛에당길정도로칼칼하고브두워요 맛있어요 배송도빠르고친절합니다')
+textList.append('재작년에 에넥스에서 보트 사서 아주 만족스럽게 사용하고 있는데 이번에 튜브두개 또 샀네요...튜브 마무리나 두께가 확실히 두껍고 안전해 보여서 좋네요... ')
+textList.append('인터넷 이미지 보다 훨씬 더 크고 튼튼하네요 색상도 밝은 아이보리 색상으로 훨씬 이쁘네요 배송도 빠르고 배송기사님도 친철합니다. 적극 추천합니다.')
+textList.append('터래기가 자알 안 까끼요.  또 문제는 같은 모델인데도 상표가 제각각..  여튼 전에 삿던 카이저가 괜찮아 상표 보고 선물용으로 20개 구매했는데 주고 욕 먹는거 아닌지..')
 
 for i in range(len(textList)):
     tokenSet = textAnalyzer(textList[i])
@@ -618,3 +650,7 @@ for i in range(len(textList)):
     #print(tokenSet.chnkListDep1)
     #tokenSet.printContextList()
     tokenSet.printChnkListDep2()
+
+
+#a = attrDic()
+print(attrDic().getAttrList('배송/NNG'))
