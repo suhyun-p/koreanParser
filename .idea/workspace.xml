@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="60bbcc9c-bbe2-492a-9bfa-b4891d34e357" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.py" afterPath="$PROJECT_DIR$/index.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index_re.py" afterPath="$PROJECT_DIR$/index_re.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,8 +16,8 @@
       <file leaf-file-name="index.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
-              <caret line="430" column="32" lean-forward="false" selection-start-line="430" selection-start-column="22" selection-end-line="430" selection-end-column="32" />
+            <state relative-caret-position="449">
+              <caret line="423" column="9" lean-forward="true" selection-start-line="406" selection-start-column="8" selection-end-line="423" selection-end-column="9" />
               <folding>
                 <element signature="e#4021#4970#0" expanded="false" />
                 <element signature="e#15035#15339#1" expanded="false" />
@@ -34,26 +33,15 @@
       <file leaf-file-name="index_re.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index_re.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="523">
-              <caret line="204" column="25" lean-forward="true" selection-start-line="204" selection-start-column="25" selection-end-line="204" selection-end-column="25" />
+            <state relative-caret-position="-779">
+              <caret line="65" column="32" lean-forward="true" selection-start-line="65" selection-start-column="32" selection-end-line="65" selection-end-column="32" />
               <folding>
                 <element signature="e#654#1639#0" expanded="false" />
-                <element signature="e#3520#6255#0" expanded="false" />
-                <element signature="e#6282#6749#0" expanded="false" />
-                <element signature="e#6774#7544#0" expanded="false" />
-                <element signature="e#7570#8529#0" expanded="false" />
-                <element signature="e#8558#9243#0" expanded="false" />
+                <element signature="e#6334#9069#0" expanded="false" />
+                <element signature="e#9096#9563#0" expanded="false" />
+                <element signature="e#12173#12858#0" expanded="false" />
+                <element signature="e#19938#22727#1" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="codecs.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/codecs.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="455">
-              <caret line="322" column="37" lean-forward="true" selection-start-line="322" selection-start-column="37" selection-end-line="322" selection-end-column="37" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -69,14 +57,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ChnklistDep2</find>
-      <find>권하</find>
-      <find>setChnkDep2</find>
-      <find>applyChnkDep2Rule</find>
-      <find>if ruleCheckRet &gt; -1:</find>
-      <find>or i in range(ruleCheckResultList):</find>
-      <find>setChnkDep2Element</find>
-      <find>주/VXV'</find>
       <find>'권하/VV'</find>
       <find>ECD</find>
       <find>서/JKM</find>
@@ -95,10 +75,18 @@
       <find>contextDetailT</find>
       <find>tokenPackage</find>
       <find>ruleCheckResult</find>
-      <find>rDetail</find>
       <find>ruleDetail</find>
       <find>JKM</find>
       <find>decoRuleCheck</find>
+      <find>화질</find>
+      <find>rDetail</find>
+      <find>화질도</find>
+      <find>sumRuleCheck</find>
+      <find>self.chnklist.append(chnkList[i])</find>
+      <find>chnkDetailT</find>
+      <find>딸기</find>
+      <find>NNB</find>
+      <find>챙기</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -230,18 +218,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-82" width="1936" height="1096" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11302083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39858013" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36004058" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39350912" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30628803" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -280,13 +267,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/index_re.py</url>
-          <line>109</line>
-          <option name="timeStamp" value="45" />
+          <line>572</line>
+          <option name="timeStamp" value="59" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/index_re.py</url>
-          <line>116</line>
-          <option name="timeStamp" value="46" />
+          <line>346</line>
+          <option name="timeStamp" value="62" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/index_re.py</url>
+          <line>334</line>
+          <option name="timeStamp" value="63" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -296,11 +288,14 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="47" />
+      <option name="time" value="64" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="self" />
+        <watch expression="context[0]" />
+        <watch expression="self" />
+        <watch expression="contextPackage.chnkPackageList[0].chnkDetailList[3]" />
       </configuration>
     </watches-manager>
   </component>
@@ -500,10 +495,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="455">
+          <caret line="322" column="37" lean-forward="true" selection-start-line="322" selection-start-column="37" selection-end-line="322" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/index.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="430" column="32" lean-forward="false" selection-start-line="430" selection-start-column="22" selection-end-line="430" selection-end-column="32" />
+        <state relative-caret-position="449">
+          <caret line="423" column="9" lean-forward="true" selection-start-line="406" selection-start-column="8" selection-end-line="423" selection-end-column="9" />
           <folding>
             <element signature="e#4021#4970#0" expanded="false" />
             <element signature="e#15035#15339#1" expanded="false" />
@@ -515,25 +518,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/codecs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="322" column="37" lean-forward="true" selection-start-line="322" selection-start-column="37" selection-end-line="322" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index_re.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="523">
-          <caret line="204" column="25" lean-forward="true" selection-start-line="204" selection-start-column="25" selection-end-line="204" selection-end-column="25" />
+        <state relative-caret-position="-779">
+          <caret line="65" column="32" lean-forward="true" selection-start-line="65" selection-start-column="32" selection-end-line="65" selection-end-column="32" />
           <folding>
             <element signature="e#654#1639#0" expanded="false" />
-            <element signature="e#3520#6255#0" expanded="false" />
-            <element signature="e#6282#6749#0" expanded="false" />
-            <element signature="e#6774#7544#0" expanded="false" />
-            <element signature="e#7570#8529#0" expanded="false" />
-            <element signature="e#8558#9243#0" expanded="false" />
+            <element signature="e#6334#9069#0" expanded="false" />
+            <element signature="e#9096#9563#0" expanded="false" />
+            <element signature="e#12173#12858#0" expanded="false" />
+            <element signature="e#19938#22727#1" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -69,21 +69,29 @@ class applyRuleReport:
 class decoRuleCheckResult:
     result = []
     text = '\t'
+    length = 0
     def __init__(self, result):
         self.result = result
-        if len(result) > 0:
-            for i in range(len(result)):
-                if type(result[i]) is chnkDetailT:
-                    self.text += result[i].text + ' '
-                elif type(result[i]) is str:
-                    self.text += result[i] + ' '
+        self.length = len(result)
+        for i in range(len(result)):
+            if type(result[i]) is chnkDetailT:
+                self.text += result[i].text + ' '
+            elif type(result[i]) is str:
+                self.text += result[i] + ' '
+
+class sumRuleCheckResult:
+    processResult = -1
+    depth = -1
+    def __init__(self, processResult, depth):
+        self.processResult = processResult
+        self.depth = depth
 
 class applyRule:
     context = []
     decoRuleList = [
         [
+            # ['착하/VA', 'ㄴ/ETD']['가격/NNG', '에다/JC']
             [
-                # ['착하/VA', 'ㄴ/ETD']['가격/NNG', '에다/JC']
                 [[], ['ETD']]
                 , [['NNG'], []]
                 , [[], []]
@@ -94,6 +102,98 @@ class applyRule:
                 , 'R2' # R2
             ]
         ]
+        , [
+            # ['화질/NNG', '도/JX']['좋/VA', '고/ECE']
+            [
+                [['NNG'], []]
+                , [['VA', 'VV'], []]
+                , [[], []]
+            ]
+            , [
+                'R1' # R1
+                , '<'
+                , 'R2' # R2
+            ]
+        ]
+        , [
+            # ['배터리/NNG', '가/JKS']['빨리/MAG']['닳/VV', '아서/ECD']
+            [
+                [['NNG'], []]
+                , [['MAG'], []]
+                , [['VA', 'VV'], []]
+            ]
+            , [
+                'R1'  # R1
+                , '<'
+                , 'R2'  # R2
+                , '>'
+                , 'R3'
+            ]
+        ]
+        , [
+            # ['많이/MAG']['파/VV', '아/ECS']
+            [
+                [['MAG'], []]
+                , [['VA', 'VV'], []]
+                , [[], []]
+            ]
+            , [
+                'R1'  # R1
+                , '>'
+                , 'R2'  # R2
+            ]
+        ]
+        , [
+            # ['가격/NNG', '도/JX']['저렴/XR', '하/XSA', '고/ECE']
+            [
+                [['NNG'], []]
+                , [['XR'], []]
+                , [[], []]
+            ]
+            , [
+                'R1'  # R1
+                , '>'
+                , 'R2'  # R2
+            ]
+        ]
+    ]
+
+    sumRuleList = [
+        # ['좋/VA', '은/ETD']['것/NNB']['같/VA', '아요/EFN']
+        # ['하/VV', 'ㄹ/ETD']['수/NNB']['있/VV', '어서/ECD']]
+        # ['믿/VV', '을/ETD']['수/NNB']['있/VV', '는/ETD']
+        [
+            [
+                []
+                , ['ETD']
+            ]
+            , [
+                ['NNB']
+                , ['NNB']
+            ]
+            , [
+                ['VA', 'VV', 'VCN']
+                , []
+            ]
+        ]
+        # ['권하/VV', '고/ECE']['싶/VXA', '은/ETD']
+        # ['챙기/VV', '어/ECS']['주/VXV', '고/ECE']
+        # ['하/VV', '어/ECS']['주/VXV', '시/EPH', '고/ECE']
+        # ['나쁘/VA', '지/ECD']['않/VXV', '고/ECE']
+        , [
+            [
+                []
+                , ['ECE', 'ECS', 'ECD']
+            ]
+            , [
+                ['VXA', 'VXV']
+                , []
+            ]
+            , [
+                []
+                , []
+            ]
+        ]
     ]
 
     def __init__(self, context):
@@ -101,6 +201,7 @@ class applyRule:
 
     def decoRuleCheck(self):
         ret = []
+        t_ret = []
         for i in range(len(self.decoRuleList)):
             rDetail = ruleDetail(self.decoRuleList[i][0])
             processResult = self.ruleCheckProcess(rDetail)
@@ -109,12 +210,26 @@ class applyRule:
                 index = processResult
                 for j in range(len(self.decoRuleList[i][1])):
                     if self.decoRuleList[i][1][j] == 'R1' or self.decoRuleList[i][1][j] == 'R2' or self.decoRuleList[i][1][j] == 'R3':
-                        ret.append(self.context.chnkDetailList[index])
+                        t_ret.append(self.context.chnkDetailList[index])
                         index += 1
                     elif self.decoRuleList[i][1][j] == '>' or self.decoRuleList[i][1][j] == '<':
-                        ret.append(self.decoRuleList[i][1][j])
+                        t_ret.append(self.decoRuleList[i][1][j])
+                ret.append(decoRuleCheckResult(t_ret))
+                t_ret = []
+        return ret
 
-        return decoRuleCheckResult(ret)
+    def sumRuleCheck(self):
+        ret = ''
+        #t_ret = []
+        for i in range(len(self.sumRuleList)):
+            rDetail = ruleDetail(self.sumRuleList[i])
+            processResult = self.ruleCheckProcess(rDetail)
+
+            if processResult > -1:
+                ret = sumRuleCheckResult(processResult, rDetail.ruleDepth)
+                break
+
+        return ret
 
     def ruleCheckProcess(self, rDetail):
         index = -1
@@ -216,16 +331,31 @@ class chnkDetailT:
     length = 0;
     i = 0
     def __init__(self, chnkList):
-        self.chnkList = chnkList  # ['가격/NNG', '대비/NNG', '최고/NNG', '에/JKM', '요/JX']
-        self.text = str(chnkList)
-        self.length = len(chnkList)
-        self.sTag = chnkList[0].split('/')[1]  # NNG
-        self.eTag = chnkList[-1].split('/')[1]  # JX
-        self.sToken = chnkList[0]  # 가격/NNG
-        self.eToken = chnkList[-1]  # 요/JX
-        if len(chnkList) > 1:
-            self.eToken_1 = chnkList[-2]  # 에/JKM
-            self.eTag_1 = chnkList[-2].split('/')[1]  # JKM
+        if len(chnkList) > 0:
+            if type(chnkList[0]) is str:
+                self.chnkList = chnkList  # ['가격/NNG', '대비/NNG', '최고/NNG', '에/JKM', '요/JX']
+                self.text = str(chnkList)
+                self.length = len(chnkList)
+                self.sTag = chnkList[0].split('/')[1]  # NNG
+                self.eTag = chnkList[-1].split('/')[1]  # JX
+                self.sToken = chnkList[0]  # 가격/NNG
+                self.eToken = chnkList[-1]  # 요/JX
+                if len(chnkList) > 1:
+                    self.eToken_1 = chnkList[-2]  # 에/JKM
+                    self.eTag_1 = chnkList[-2].split('/')[1]  # JKM
+            elif type(chnkList[0]) is chnkDetailT:
+                for i in range(len(chnkList)):
+                    self.chnkList.append(chnkList[i].chnkList)
+                    self.text += chnkList[i].text
+                    self.length += chnkList[i].length
+                self.text = '[' + self.text + ']'
+                self.sTag = chnkList[0].sTag
+                self.eTag = chnkList[-1].sTag
+                self.sToken = chnkList[0].sToken
+                self.eToken = chnkList[0].eToken
+                if len(chnkList) > 1:
+                    self.eToken_1 = chnkList[-2].eToken
+                    self.eTag_1 = chnkList[-2].eTag
 
 class chnkPackageT:
     chnkDetailList = []
@@ -414,28 +544,54 @@ class textAnalyzer:
             ret.append(chnkPackageT(t_ret))
         t_ret = []
 
-        return contextPackageT(ret)
+        contextPackage = contextPackageT(ret)
+        contextRePackage = self.setContextRePackage(contextPackage)
+
+        return contextRePackage
+
+    def setContextRePackage(self, contextPackage):
+        for i in range(len(contextPackage.chnkPackageList)):
+            index = applyRule(contextPackage.chnkPackageList[i]).sumRuleCheck()
+            if type(index) is sumRuleCheckResult:
+                ret = []
+                t_ret = []
+                jumpFlag = False
+                for j in range(len(contextPackage.chnkPackageList[i].chnkDetailList)):
+                    if j in range(index.processResult, index.processResult + index.depth):
+                        if jumpFlag == False: jumpFlag = True
+                        t_ret.append(contextPackage.chnkPackageList[i].chnkDetailList[j])
+                    else:
+                        if jumpFlag == True:
+                            jumpFlag = False
+                            ret.append(chnkDetailT(t_ret))
+                            t_ret = []
+                        ret.append(contextPackage.chnkPackageList[i].chnkDetailList[j])
+                ret.append(chnkDetailT(t_ret))
+                t_ret = []
+                contextPackage.chnkPackageList[i] = chnkPackageT(ret)
+
+        return contextPackage
 
     def printContextPackage(self):
         for i in range(self.contextPackage.length):
             context = self.contextPackage.index(i)
             print(context.text)
-            #self.applyDecoRule(context)
+
             decoResult = applyRule(context).decoRuleCheck()
-            if len(decoResult.result) > 0:
-                print(decoResult.text)
-
-    def applyDecoRule(self, context):
-        for i in range(len(context.chnkDetailList)):
-            detail = context.index(i)
-            nextDetail = context.nextDetail()
-
-            if detail.eTag == 'ETD':
-                if nextDetail.sTag == 'NNG':
-                    print('\t', detail.text, '>', nextDetail.text)
+            for j in range(len(decoResult)):
+                print(decoResult[j].text)
 
 textList = []
 
+textList.append('상품이 여기저기 색이 벗겨져 새 상품같지 않네요~누가 반송한 상품인건지...밤에 찍은거라 빛 때문에 잘 보이진 않지만~상품을 꺼냈을때 아이가 맘이 상했네요~교환 신청하고 쉽지만 아이가 그냥 사용하겠다네요~')
+textList.append('수신거리가 짧고 배터리가 빨리 닳아서 좀 아쉽지만 ..  가지고 놀기 딱 좋네요.. 빠르고 배리굿 바퀴하나는 자가 도색함 ㅋㅋ')
+textList.append('생일선물로 구매했는데 배송도 빠르고 가격도 저렴하고 상품도 너무 괜찮습니다  많이파세요~')
+textList.append('해외배송이라늦을줄알았는데생각보다빠른배송에깜작놀랐네요 가성비굿이며 추천')
+textList.append('대형마트에서 구매하려다가 가격비교해 보니 15,000원이나 저렴해서 구매했습니다. 배송도 총알이고..매우 만족함. 많이 파세여... 역시 장난감은 온라인이 저렴하네여..')
+textList.append('무선조종 자동차 스마트토이 쎌토 Jeep패키지 RC카 조립다하고보니 스마트폰으로도 조종이되더라구요 신기해요 ㅋㅋ 잘 가지고 놀고있습니다 굿!!')
+textList.append('애들 장난감으로 싼 가격은 아니지만, RC카 중에서는 저렴한편인데 가격대비 크기도 크고, 바퀴쪽 서스펜션이 스프링 타입으로 잘 돼 있어서 주행감이 좋습니다.  후륜구동이고,  파워도 좋은편이라 드리프트도 가능하고 속도도 빠르고 재미가 있습니다.  추가배터리 같이 구입해서 바꿔가며 사용하는데,  배터리 한개보다는 추천입니다.  단점: 차량의 전원스위치 작동이 불편합니다.  차량 커버를 탈거하고, 배터리케이스를 분리해야 켜고 끌수있는 스위치가 노출됩니다.  왜 이렇게 만들었는지......ㅋ 초딩 아들 장난감으로 RC카 5만원 이하제품 몇개 사봤는데,  지금까지 제품중에 가장 쓸만합니다.  추천해요~')
+
+'''
 textList.append('냄새가좀나서 받자마자 세탁했는데.. 목안늘어났으면 좋겠네용ㅠㅠ')
 textList.append('착한 가격에다 빠른배송 맘에듬니다 연근 조림할때 넣었더니 윤기가 좌르르하니맛있네요')
 textList.append('홈플러스 간단히 장보기 조은거 같아요ㆍ배송조 빠르구요ㆍ 부산오데ㅣㅇ 양도 좋고 가격도 착하고 맛도 괜찬은거같아요ㆍ')
@@ -466,6 +622,7 @@ textList.append('가격도매우저렴히고일단맛이입맛에당길정도로
 textList.append('재작년에 에넥스에서 보트 사서 아주 만족스럽게 사용하고 있는데 이번에 튜브두개 또 샀네요...튜브 마무리나 두께가 확실히 두껍고 안전해 보여서 좋네요... ')
 textList.append('인터넷 이미지 보다 훨씬 더 크고 튼튼하네요 색상도 밝은 아이보리 색상으로 훨씬 이쁘네요 배송도 빠르고 배송기사님도 친철합니다. 적극 추천합니다.')
 textList.append('터래기가 자알 안 까끼요.  또 문제는 같은 모델인데도 상표가 제각각..  여튼 전에 삿던 카이저가 괜찮아 상표 보고 선물용으로 20개 구매했는데 주고 욕 먹는거 아닌지..')
+'''
 
 for i in range(len(textList)):
     tokenSet = textAnalyzer(textList[i])
