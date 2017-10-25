@@ -13,6 +13,8 @@ class attrDic:
         self.attrList.append(['착하/VA'])
         self.keywordList.append('배송/NNG')
         self.attrList.append(['빠르/VA'])
+        self.keywordList.append('색/NNG')
+        self.attrList.append(['벗겨지/VA'])
 
     def isAttr(self, keyword, attr):
         if keyword in self.keywordList:
@@ -70,14 +72,33 @@ class decoRuleCheckResult:
     result = []
     text = '\t'
     length = 0
+    target = ''
+    deco = ''
     def __init__(self, result):
         self.result = result
         self.length = len(result)
         for i in range(len(result)):
+            detail = result[i]
+            beforeDetail = 'None'
+            nextDetail = 'None'
+            if i < len(result)-1:
+                nextDetail = result[i+1]
+            if i > 1 :
+                beforeDetail = result[i - 1]
+
             if type(result[i]) is chnkDetailT:
-                self.text += result[i].text + ' '
-            elif type(result[i]) is str:
-                self.text += result[i] + ' '
+                self.text += detail.text + ' '
+                if type(nextDetail) is str:
+                    if nextDetail == '>':
+                        self.deco = detail
+                    elif nextDetail == '<':
+                        self.target = detail
+            elif type(detail) is str:
+                self.text += detail + ' '
+                if detail == '>':
+                    self.target = nextDetail
+                elif detail == '<':
+                    self.deco = nextDetail
 
 class sumRuleCheckResult:
     processResult = -1
@@ -126,7 +147,6 @@ class applyRule:
                 'R1'  # R1
                 , '<'
                 , 'R2'  # R2
-                , '>'
                 , 'R3'
             ]
         ]
@@ -451,6 +471,17 @@ class textAnalyzer:
             tagList.append(self.tokenized[i].split('/')[1])
         return tagList
 
+    def setChnkPackage2(self):
+        ret = []
+        t_ret = []
+        tokenPackage = tokenPackageT(self.tokenized)
+        for i in range(len(self.tokenized)):
+            token = tokenPackage.index(i)
+            tag = token.split('/')[1]
+            nextTag = tokenPackage.next()
+
+            
+
     def setChnkPackage(self): # '화질/NNG', '도/JX' >> ['화질/NNG', '도/JX'] '좋/VA', '고/ECE' >> ['좋/VA', '고/ECE']
         ret = []
         t_ret = []
@@ -516,6 +547,11 @@ class textAnalyzer:
             if detail.eTag in eList:  # 기본적으로, 어미로 끝나면 줄나눔
                 # if nextDetail != 'None' and nextDetail.sTag in eList:
                 # pass
+                if detail.eTag == 'ECE':
+                    if type(nextDetail) is chnkDetailT and nextDetail.sTag == 'VV':
+                        # ['가지/VV', '고/ECE'] ['놀/VV', '기/ETN']
+                        continue
+
                 if type(nextDetail) is chnkDetailT and (nextDetail.sTag == 'VXV' or nextDetail.sTag == 'VXA'):
                     # 어미 + 보조동사는 줄나눔 X : 하/XSV 고/ECE 있/VXV 었/EPT ...
                     # 어미 + 보조형용사는 줄나눔 X : ['권하/VV', '고/ECE'] ['싶/VXA', '은/ETD']
@@ -580,6 +616,8 @@ class textAnalyzer:
             decoResult = applyRule(context).decoRuleCheck()
             for j in range(len(decoResult)):
                 print(decoResult[j].text)
+                print('\t', 'target : ', decoResult[j].target.text)
+                print('\t', 'deco : ', decoResult[j].deco.text)
 
 textList = []
 
@@ -588,8 +626,14 @@ textList.append('수신거리가 짧고 배터리가 빨리 닳아서 좀 아쉽
 textList.append('생일선물로 구매했는데 배송도 빠르고 가격도 저렴하고 상품도 너무 괜찮습니다  많이파세요~')
 textList.append('해외배송이라늦을줄알았는데생각보다빠른배송에깜작놀랐네요 가성비굿이며 추천')
 textList.append('대형마트에서 구매하려다가 가격비교해 보니 15,000원이나 저렴해서 구매했습니다. 배송도 총알이고..매우 만족함. 많이 파세여... 역시 장난감은 온라인이 저렴하네여..')
-textList.append('무선조종 자동차 스마트토이 쎌토 Jeep패키지 RC카 조립다하고보니 스마트폰으로도 조종이되더라구요 신기해요 ㅋㅋ 잘 가지고 놀고있습니다 굿!!')
-textList.append('애들 장난감으로 싼 가격은 아니지만, RC카 중에서는 저렴한편인데 가격대비 크기도 크고, 바퀴쪽 서스펜션이 스프링 타입으로 잘 돼 있어서 주행감이 좋습니다.  후륜구동이고,  파워도 좋은편이라 드리프트도 가능하고 속도도 빠르고 재미가 있습니다.  추가배터리 같이 구입해서 바꿔가며 사용하는데,  배터리 한개보다는 추천입니다.  단점: 차량의 전원스위치 작동이 불편합니다.  차량 커버를 탈거하고, 배터리케이스를 분리해야 켜고 끌수있는 스위치가 노출됩니다.  왜 이렇게 만들었는지......ㅋ 초딩 아들 장난감으로 RC카 5만원 이하제품 몇개 사봤는데,  지금까지 제품중에 가장 쓸만합니다.  추천해요~')
+# textList.append('무선조종 자동차 스마트토이 쎌토 Jeep패키지 RC카 조립다하고보니 스마트폰으로도 조종이되더라구요 신기해요 ㅋㅋ 잘 가지고 놀고있습니다 굿!!')
+textList.append('무쟈게 큰 박스에 가구가 온줄... 우주선이 엄청 커요  아이가 너무 좋아해요 분리 합체도 잘 되고 건전지가 두군데 인데 모두들어있네요')
+textList.append('생산자님의 자부심을 믿고 가족의 건강을 생각하며 구입함')
+textList.append('넘 좋아요 하나더 구매하고픈데 어떤경로로 구매했는지가 생각이 안나서 구매를 못하겠어요 도와주세요')
+textList.append('조카가 되게 좋아하나봐요~~~ 차가 작동해서  움직이니까 신기한가봅니다~~~')
+textList.append('나름 괜찮고 무선 조종을 안하더라도 차량을 전시해 놓아도 좋은 상품이네요. 적극 추천합니다^^')
+
+textList.append('추가옵션 상품은 안그럴지모르겠지만 기본상품 과실상태가 정말 실망입니다 과실크기야 그렇다한다지만 올해수확인지 아님 창고에 묵힌건지 과즙도 없이 알맹이 컵질이 질기고 푸석거리네요 절반이상 버리고 몇개추려서 먹고맙니다 맘같아선 클레임 넣고싶지만요 이런 상품 팔지마세요')
 
 '''
 textList.append('냄새가좀나서 받자마자 세탁했는데.. 목안늘어났으면 좋겠네용ㅠㅠ')
@@ -626,9 +670,9 @@ textList.append('터래기가 자알 안 까끼요.  또 문제는 같은 모델
 
 for i in range(len(textList)):
     tokenSet = textAnalyzer(textList[i])
-    #print(tokenSet.tokenized)
+    print(tokenSet.tokenized)
     #print(tokenSet.tagList)
     #tokenSet.printChnkPackage()
-    tokenSet.printContextPackage()
+    #tokenSet.printContextPackage()
     #tokenSet.printChnkListDep2()
     print('')
